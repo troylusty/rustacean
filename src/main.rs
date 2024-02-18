@@ -1,7 +1,3 @@
-// Take input of password and text filepath
-// Read file contents and hash with given password
-// Return hashed data out to new file
-
 use anyhow::Result;
 use clap::Parser;
 use std::ffi::OsStr;
