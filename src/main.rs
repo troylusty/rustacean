@@ -5,16 +5,16 @@
 use anyhow::Result;
 use clap::Parser;
 use std::fs::File;
-use std::io::{BufReader, prelude::*};
+use std::io::{prelude::*, BufReader};
 use std::path::PathBuf;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Cli {
-#[arg(short, long)]
+    #[arg(short, long)]
     path_to_file: std::path::PathBuf,
     #[arg(short, long)]
-    key: String, 
+    key: String,
 }
 
 fn write_file(path: &mut PathBuf, contents: &String) -> Result<()> {
@@ -24,7 +24,7 @@ fn write_file(path: &mut PathBuf, contents: &String) -> Result<()> {
     Ok(())
 }
 
-fn read_file(file_path: &mut PathBuf) -> String {
+fn read_file(file_path: &PathBuf) -> String {
     let file = File::open(file_path).expect("no such file");
     let mut buf_reader = BufReader::new(file);
     let mut contents = String::new();
@@ -35,9 +35,10 @@ fn read_file(file_path: &mut PathBuf) -> String {
 fn main() -> Result<()> {
     let mut args = Cli::parse();
 
-    let _filevar = read_file(&mut args.path_to_file);
+    println!("File: {:?}, Key: {:?}", &args.path_to_file, &args.key);
+
+    let _filevar = read_file(&args.path_to_file);
     let _fileout = write_file(&mut args.path_to_file, &_filevar);
 
     Ok(())
 }
-
