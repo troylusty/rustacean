@@ -14,13 +14,6 @@ struct Cli {
     key: String,
 }
 
-fn write_file(path: &mut PathBuf, contents: &String) -> Result<()> {
-    path.set_extension("enc");
-    let mut file = File::create(path).expect("could not create file");
-    write!(file, "{}", contents).expect("could not write to file");
-    Ok(())
-}
-
 fn read_file(file_path: &PathBuf) -> String {
     let mut contents = Default::default();
     if file_path.extension().and_then(OsStr::to_str) == Some("txt") {
@@ -29,7 +22,25 @@ fn read_file(file_path: &PathBuf) -> String {
         contents = String::new();
         let _ = buf_reader.read_to_string(&mut contents);
     }
+    contents = hash_data(&contents);
     contents
+}
+
+fn hash_data(contents: &String) -> String {
+    let mut append_string: String = Default::default();
+    for c in contents.chars() {
+        println!("{}", c);
+        // 'Encrypt' each char or whitespaced word then 
+        // push_str each looped element back together.
+    }
+    append_string
+}
+
+fn write_file(path: &mut PathBuf, contents: &String) -> Result<()> {
+    path.set_extension("enc");
+    let mut file = File::create(path).expect("could not create file");
+    write!(file, "{}", contents).expect("could not write to file");
+    Ok(())
 }
 
 fn main() -> Result<()> {
