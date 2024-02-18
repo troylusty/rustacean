@@ -21,16 +21,16 @@ struct Cli {
 fn write_file(path: &mut PathBuf, contents: &String) -> Result<()> {
     path.set_extension("enc");
     let mut file = File::create(path).expect("could not create file");
-    write!(file, "{:?}", contents).expect("could not write to file");
+    write!(file, "{}", contents).expect("could not write to file");
     Ok(())
 }
 
 fn read_file(file_path: &PathBuf) -> String {
-    let contents = Default::default();
+    let mut contents = Default::default();
     if file_path.extension().and_then(OsStr::to_str) == Some("txt") {
         let file = File::open(file_path).expect("no such file");
         let mut buf_reader = BufReader::new(file);
-        let mut contents = String::new();
+        contents = String::new();
         let _ = buf_reader.read_to_string(&mut contents);
     }
     contents
