@@ -2,6 +2,8 @@
 name = "rustacean"
 version = "0.1.0"
 edition = "2021"
+description = "Converts a plaintext file into its key encrypted counterpart"
+authors = ["Troy Lusty <hello@troylusty.com>"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

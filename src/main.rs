@@ -1,9 +1,10 @@
-// Take input of password and filepath
+// Take input of password and text filepath
 // Read file contents and hash with given password
 // Return hashed data out to new file
 
 use anyhow::Result;
 use clap::Parser;
+use std::ffi::OsStr;
 use std::fs::File;
 use std::io::{prelude::*, BufReader};
 use std::path::PathBuf;
@@ -25,20 +26,20 @@ fn write_file(path: &mut PathBuf, contents: &String) -> Result<()> {
 }
 
 fn read_file(file_path: &PathBuf) -> String {
-    let file = File::open(file_path).expect("no such file");
-    let mut buf_reader = BufReader::new(file);
-    let mut contents = String::new();
-    let _ = buf_reader.read_to_string(&mut contents);
+    let contents = Default::default();
+    if file_path.extension().and_then(OsStr::to_str) == Some("txt") {
+        let file = File::open(file_path).expect("no such file");
+        let mut buf_reader = BufReader::new(file);
+        let mut contents = String::new();
+        let _ = buf_reader.read_to_string(&mut contents);
+    }
     contents
 }
 
 fn main() -> Result<()> {
     let mut args = Cli::parse();
-
     println!("File: {:?}, Key: {:?}", &args.path_to_file, &args.key);
-
     let _filevar = read_file(&args.path_to_file);
     let _fileout = write_file(&mut args.path_to_file, &_filevar);
-
     Ok(())
 }
