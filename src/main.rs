@@ -12,6 +12,8 @@ struct Cli {
     path_to_file: std::path::PathBuf,
     #[arg(short, long)]
     key: String,
+    #[arg(short, long)]
+    verbose: bool,
 }
 
 fn read_file(file_path: &PathBuf) -> String {
@@ -30,8 +32,8 @@ fn hash_data(contents: &String) -> String {
     let mut append_string: String = Default::default();
     for c in contents.chars() {
         println!("{}", c);
-        // 'Encrypt' each char or whitespaced word then 
-        // push_str each looped element back together.
+        // 'Encrypt' each char or whitespaced word
+        append_string.push_str(&c.to_string())
     }
     append_string
 }
@@ -45,8 +47,11 @@ fn write_file(path: &mut PathBuf, contents: &String) -> Result<()> {
 
 fn main() -> Result<()> {
     let mut args = Cli::parse();
-    println!("File: {:?}, Key: {:?}", &args.path_to_file, &args.key);
+    if &args.verbose == &true {
+        println!("File: {:?}, Key: {:?}, Verbose: {:?}", &args.path_to_file, &args.key, &args.verbose);
+    }
     let _filevar = read_file(&args.path_to_file);
-    let _fileout = write_file(&mut args.path_to_file, &_filevar);
+    let _filehash = hash_data(&_filevar);
+    let _fileout = write_file(&mut args.path_to_file, &_filehash);
     Ok(())
 }
