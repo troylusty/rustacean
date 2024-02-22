@@ -31,10 +31,10 @@ fn read_file(file_path: &PathBuf) -> String {
 fn hash_data(contents: &String) -> String {
     let mut append_string: String = Default::default();
     for c in contents.chars() {
-        println!("{}", c);
         // 'Encrypt' each char or whitespaced word
         append_string.push_str(&c.to_string())
     }
+    println!("{}", &append_string);
     append_string
 }
 
@@ -48,7 +48,10 @@ fn write_file(path: &mut PathBuf, contents: &String) -> Result<()> {
 fn main() -> Result<()> {
     let mut args = Cli::parse();
     if &args.verbose == &true {
-        println!("File: {:?}, Key: {:?}, Verbose: {:?}", &args.path_to_file, &args.key, &args.verbose);
+        println!(
+            "File: {:?}, Key: {:?}, Verbose: {:?}",
+            &args.path_to_file, &args.key, &args.verbose
+        );
     }
     let _filevar = read_file(&args.path_to_file);
     let _filehash = hash_data(&_filevar);
