@@ -2,6 +2,7 @@ use anyhow::Result;
 use clap::Parser;
 use std::ffi::OsStr;
 use std::fs::File;
+use std::hash::{DefaultHasher, Hash, Hasher};
 use std::io::{prelude::*, BufReader};
 use std::path::PathBuf;
 
@@ -24,11 +25,11 @@ fn read_file(file_path: &PathBuf) -> String {
         contents = String::new();
         let _ = buf_reader.read_to_string(&mut contents);
     }
-    contents = hash_data(&contents);
     contents
 }
 
-fn hash_data(contents: &String) -> String {
+fn hash_data(contents: &String, key: u64) -> String {
+    println!("Hashed Key: {:x}", &key);
     let mut append_string: String = Default::default();
     for c in contents.chars() {
         // 'Encrypt' each char or whitespaced word
@@ -53,8 +54,11 @@ fn main() -> Result<()> {
             &args.path_to_file, &args.key, &args.verbose
         );
     }
+    let mut hasher = DefaultHasher::new();
+    args.key.hash(&mut hasher);
+    let hash_key = hasher.finish();
     let _filevar = read_file(&args.path_to_file);
-    let _filehash = hash_data(&_filevar);
+    let _filehash = hash_data(&_filevar, hash_key);
     let _fileout = write_file(&mut args.path_to_file, &_filehash);
     Ok(())
 }
